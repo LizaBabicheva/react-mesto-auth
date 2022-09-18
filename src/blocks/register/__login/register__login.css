@@ -1,0 +1,13 @@
+.register__login {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 15px auto 0;
+  justify-content: center;
+}
+
+@media (max-width: 420px) {
+  .register__login {
+    margin-top: 20px;
+  }
+}

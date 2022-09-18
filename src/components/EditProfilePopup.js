@@ -45,7 +45,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           value={name} onChange={handleNameChange} />
         <span className="popup__error"></span>
       </label>
-      <label className="popup__input-label ">
+      <label className="popup__input-label">
         <input className="popup__input popup__input_type_profileabout" type="text" placeholder="О себе" id="input-profile-about" name="profile-about" minLength="2" maxLength="200" required
           value={description} onChange={handleDescriptionChange} />
         <span className="popup__error"></span>

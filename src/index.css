@@ -49,3 +49,15 @@
 
 @import url(./blocks/element/__delete/_visible/element__delete_visible.css);
 @import url(./blocks/profile/__avatar-button/profile__avatar-button.css);
+
+@import url(./blocks/sign/sign.css);
+@import url(./blocks/sign/__header/sign__header.css);
+@import url(./blocks/sign/__form/sign__form.css);
+@import url(./blocks/sign/__input/sign__input.css);
+@import url(./blocks/sign/__error/sign__error.css);
+@import url(./blocks/sign/__submit/sign__submit.css);
+
+@import url(./blocks/register/register.css);
+@import url(./blocks/register/__login/register__login.css);
+@import url(./blocks/register/__login-text/register__login-text.css);
+@import url(./blocks/register/__login-link/register__login-link.css);

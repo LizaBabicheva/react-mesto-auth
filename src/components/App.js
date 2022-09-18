@@ -9,6 +9,8 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
+import Login from './Login';
+import Register from './Register';
 
 function App() {
 
@@ -139,7 +141,7 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleConfirmDeleteClick}
           cards={cards} />
-
+        
         <Footer />
 
         <EditProfilePopup
