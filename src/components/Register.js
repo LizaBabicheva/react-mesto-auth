@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 function Register() {
   return (
@@ -17,8 +18,7 @@ function Register() {
       </form>
       <div className="register__login">
         <p className="register__login-text">Уже зарегистрированы?&nbsp;</p>
-        {/* <Link to="" className="register__login-link">Войти</Link> */}
-        <p className="register__login-link">Войти</p>
+        <Link to="/sign-in" className="register__login-link">Войти</Link>
       </div>
     </section>
   )

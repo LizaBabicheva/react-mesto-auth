@@ -5,6 +5,8 @@
   margin: 0;
   opacity: 1;
   transition: opacity 1s ease;
+  color: #fff;
+  text-decoration: none;
 }
 
 .register__login-link:hover {
