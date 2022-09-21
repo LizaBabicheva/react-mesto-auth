@@ -61,3 +61,7 @@
 @import url(./blocks/register/__login/register__login.css);
 @import url(./blocks/register/__login-text/register__login-text.css);
 @import url(./blocks/register/__login-link/register__login-link.css);
+@import url(./blocks/menu/__link/menu__link.css);
+@import url(./blocks/menu/menu.css);
+@import url(./blocks/menu/__email/menu__email.css);
+@import url(./blocks/popup/__tooltip-icon/popup__tooltip-icon.css);

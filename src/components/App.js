@@ -27,10 +27,12 @@ function App() {
 
   //
   const [loggedIn, setLoggedIn] = useState(false);
-  function handleLoggedIn() {
+  
+  function handleLogin() {
     setLoggedIn(true);
   }
   //
+
 
   useEffect((userData) => {
     api.getApiUserInfo(userData)
@@ -141,17 +143,37 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
 
       <div className="root">
+
+
+
         <Header />
         <Switch>
-          
+       
           <Route path="/sign-in">
-            <Login />
+            <Login 
+            handleLogin={handleLogin}
+            />
           </Route>
 
           <Route path="/sign-up">
             <Register />
           </Route>
-
+          <ProtectedRoute
+            
+            exact path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleConfirmDeleteClick}
+            cards={cards}
+          />
+          <Route path="*">
+                {loggedIn ? console.log('aaaa') : console.log('bbbbb')}
+              </Route>
           {/* <Route exact path="/">
             {!loggedIn ? <Redirect to="/sign-in" /> : 
             <Main
@@ -164,18 +186,7 @@ function App() {
               cards={cards} />
             }
           </Route> */}
-          <ProtectedRoute
-            path="/"
-            loggedIn={loggedIn}
-            component={Main}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleConfirmDeleteClick}
-            cards={cards}
-          />
+
         </Switch>
 
         <Footer />
@@ -203,6 +214,9 @@ function App() {
           isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           onConfirmDelete={handleCardDelete} />
+
+
+
       </div>
 
     </CurrentUserContext.Provider>
