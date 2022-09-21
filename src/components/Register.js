@@ -5,45 +5,46 @@ import * as auth from '../auth.js';
 
 function Register() {
 
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-const history = useHistory();
+  const history = useHistory();
 
-function handleEmailChange(e) {
-  setEmail(e.target.value);
-}
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
 
-function handlePasswordChange(e) {
-  setPassword(e.target.value);
-}
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
 
-function handleSubmit(e) {
-  e.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
     auth.signup(email, password)
-    .then((res) => {
-if(res) {
-
-// }, () => {
-  history.push('/sign-in');
-}
-    });
-}
+      .then((res) => {
+        if (res) {
+          // Вывести попап с подтверждением регистрации
+          history.push('/sign-in');
+        } else {
+          //Попап с отказом регистрации
+        }
+      });
+  }
 
   return (
     <section className="sign register">
       <h2 className="sign__header register__header">Регистрация</h2>
       <form className="sign__form register__form"
-      onSubmit={handleSubmit}>
+        onSubmit={handleSubmit}>
         <label className="sign__input-label register__input-label">
           <input className="sign__input register__input register__input_type_email" type="email" placeholder="Email" id="input-register-email" name="register-email" required
-          value={email} onChange={handleEmailChange}></input>
+            value={email} onChange={handleEmailChange}></input>
           <span className="sign__error register__error"></span>
         </label>
         <label className="sign__input-label register__input-label">
           <input className="sign__input register__input register__input_type_password" type="password" placeholder="Пароль" id="input-register-password" name="register-password" required
-          value={password} onChange={handlePasswordChange}></input>
+            value={password} onChange={handlePasswordChange}></input>
           <span className="sign__error register__error"></span>
         </label>
         <button className="sign__submit register__submit" type="submit" aria-label="Зарегистрироваться">Зарегистрироваться</button>

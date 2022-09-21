@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -13,6 +13,7 @@ import ConfirmDeletePopup from './ConfirmDeletePopup';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
+import * as auth from '../auth.js';
 
 function App() {
 
@@ -27,9 +28,30 @@ function App() {
 
   //
   const [loggedIn, setLoggedIn] = useState(false);
-  
   function handleLogin() {
     setLoggedIn(true);
+  }
+
+  const history = useHistory();
+  useEffect(() => {
+    tokenCheck()
+  }, [])
+
+  const [userData, setUserData] = useState({ email: '' });
+  function tokenCheck() {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        auth.getToken(token)
+          .then((res) => {
+            if (res) {
+              setUserData({ email: res.data.email });
+              handleLogin();
+              history.push('/');
+            }
+          })
+      }
+    }
   }
   //
 
@@ -144,22 +166,23 @@ function App() {
 
       <div className="root">
 
+        <Header
+          email={userData.email}
+        // loggedIn={loggedIn}
+        />
 
-
-        <Header />
         <Switch>
-       
           <Route path="/sign-in">
-            <Login 
-            handleLogin={handleLogin}
+            <Login
+              handleLogin={handleLogin}
             />
           </Route>
 
           <Route path="/sign-up">
             <Register />
           </Route>
+
           <ProtectedRoute
-            
             exact path="/"
             loggedIn={loggedIn}
             component={Main}
@@ -171,9 +194,10 @@ function App() {
             onCardDelete={handleConfirmDeleteClick}
             cards={cards}
           />
-          <Route path="*">
-                {loggedIn ? console.log('aaaa') : console.log('bbbbb')}
-              </Route>
+
+          {/* <Route path="*">
+            {loggedIn ? console.log('aaaa') : console.log('bbbbb')}
+          </Route> */}
           {/* <Route exact path="/">
             {!loggedIn ? <Redirect to="/sign-in" /> : 
             <Main
@@ -214,8 +238,6 @@ function App() {
           isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           onConfirmDelete={handleCardDelete} />
-
-
 
       </div>
 
