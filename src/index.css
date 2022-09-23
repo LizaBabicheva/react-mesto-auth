@@ -51,7 +51,7 @@
 @import url(./blocks/profile/__avatar-button/profile__avatar-button.css);
 
 @import url(./blocks/sign/sign.css);
-@import url(./blocks/sign/__header/sign__header.css);
+@import url(./blocks/sign/__heading/sign__heading.css);
 @import url(./blocks/sign/__form/sign__form.css);
 @import url(./blocks/sign/__input/sign__input.css);
 @import url(./blocks/sign/__error/sign__error.css);
@@ -66,3 +66,5 @@
 @import url(./blocks/menu/__email/menu__email.css);
 @import url(./blocks/popup/__tooltip-icon/popup__tooltip-icon.css);
 @import url(./blocks/menu/__button/menu__button.css);
+@import url(./blocks/popup/__tooltip-heading/popup__tooltip-heading.css);
+@import url(./blocks/popup/__container/_type/popup__container_type_tooltip.css);

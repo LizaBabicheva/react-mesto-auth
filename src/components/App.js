@@ -14,6 +14,7 @@ import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import * as auth from '../auth.js';
+import InfoTooltip from './InfoTooltip';
 
 function App() {
 
@@ -35,7 +36,7 @@ function App() {
   const history = useHistory();
   useEffect(() => {
     tokenCheck()
-  }, [])
+  },[])
 
   const [userData, setUserData] = useState({ email: '' });
   function tokenCheck() {
@@ -53,6 +54,34 @@ function App() {
       }
     }
   }
+
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+
+  function handleInfoTooltip() {
+    setIsInfoTooltipOpen(true);
+  }
+
+const [isRegistered, setIsRegistered] = useState(false);
+
+function handleRegistered() {
+  setIsRegistered(true);
+}
+
+  function handleRegister(data) {
+    auth.signup(data.email, data.password)
+      .then((res) => {
+        if (res) {
+            handleRegistered();
+            handleInfoTooltip();
+          history.push('/sign-in');
+        } else {
+          handleInfoTooltip();
+        }
+      });
+
+  }
+
+
   //
 
 
@@ -103,6 +132,9 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: '', link: '' });
     setIsConfirmDeletePopupOpen(false);
+    //
+    setIsInfoTooltipOpen(false);
+    //
   }
 
   function handleUpdateUser(userData) {
@@ -168,7 +200,7 @@ function App() {
 
         <Header
           email={userData.email}
-        // loggedIn={loggedIn}
+        loggedIn={loggedIn}
         />
 
         <Switch>
@@ -179,7 +211,9 @@ function App() {
           </Route>
 
           <Route path="/sign-up">
-            <Register />
+            <Register 
+            onRegister={handleRegister} 
+            />
           </Route>
 
           <ProtectedRoute
@@ -238,6 +272,11 @@ function App() {
           isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           onConfirmDelete={handleCardDelete} />
+
+          <InfoTooltip 
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups} 
+          isRegistered={isRegistered}/>
 
       </div>
 

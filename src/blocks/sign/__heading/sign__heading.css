@@ -1,4 +1,4 @@
-.sign__header {
+.sign__heading {
   font-size: 24px;
   font-weight: 900;
   line-height: 1.2;
@@ -7,7 +7,7 @@
 }
 
 @media (max-width: 420px) {
-  .sign__header {
+  .sign__heading {
     font-size: 20px;
     margin-bottom: 40px;
   }

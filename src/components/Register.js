@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import * as auth from '../auth.js';
 
 
-function Register() {
+function Register({ onRegister }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,20 +21,15 @@ function Register() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    auth.signup(email, password)
-      .then((res) => {
-        if (res) {
-          // Вывести попап с подтверждением регистрации
-          history.push('/sign-in');
-        } else {
-          //Попап с отказом регистрации
-        }
-      });
+    onRegister({
+      email, 
+      password
+    });
   }
 
   return (
     <section className="sign register">
-      <h2 className="sign__header register__header">Регистрация</h2>
+      <h2 className="sign__heading register__header">Регистрация</h2>
       <form className="sign__form register__form"
         onSubmit={handleSubmit}>
         <label className="sign__input-label register__input-label">

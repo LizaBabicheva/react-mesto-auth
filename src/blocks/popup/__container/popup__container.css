@@ -5,6 +5,8 @@
   width: 100%;
   position: relative;
   margin: auto auto;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 @media (max-width: 460px) {

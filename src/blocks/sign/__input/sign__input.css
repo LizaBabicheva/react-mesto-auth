@@ -2,7 +2,7 @@
   width: 100%;
   font-family: inherit;
   background-color: transparent;
-  color: #fff;
+  color: #CCC;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.2;
@@ -15,8 +15,4 @@
 .sign__input:focus {
   outline: none;
   border-bottom: 2px solid #fff;
-}
-
-.sign__input::placeholder {
-  color: #CCC;
 }

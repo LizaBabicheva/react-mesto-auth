@@ -2,7 +2,7 @@ import logo from '../images/logo.svg';
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-function Header({ email }) {
+function Header({ email, loggedIn }) {
 
   const history = useHistory();
 
@@ -15,13 +15,19 @@ function Header({ email }) {
     <header className="header">
       <a href="#"><img className="header__logo" src={logo} alt="Лого" /></a>
       <nav className="menu">
-        <h2 className="menu__email">{email}</h2>
-        {/* {props.loggedIn && ( */}
-        <button className="menu__link menu__button"
-          onClick={signOut}>Выйти</button>
-        {/* )} */}
-        <Link className="menu__link" to="/sign-up">Регистрация</Link>
-        <Link className="menu__link" to="/sign-in">Войти</Link>
+        {loggedIn && (
+          <h2 className="menu__email">{email}</h2>
+        )}
+        {loggedIn && (
+          <button className="menu__link menu__button"
+            onClick={signOut}>Выйти</button>
+        )}
+        {!loggedIn && (
+          <Link className="menu__link" to="/sign-up">Регистрация</Link>)}
+        {!loggedIn && (
+          <Link className="menu__link" to="/sign-in">Войти</Link>
+        )}
+
       </nav>
     </header>
   )
