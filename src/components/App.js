@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Redirect, Route, Switch, withRouter, useHistory } from 'react-router-dom';
+import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -26,53 +26,60 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] = useState(false);
   const [cardDelete, setCardDelete] = useState({});
-
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   //
+
+  const [email, setEmail] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
-  function handleLogin() {
-    setLoggedIn(true);
+  const history = useHistory();
+
+  function handleLogin(data) {
+    auth.signin(data.email, data.password)
+      .then((res) => {
+        if (res.token) {
+          setEmail(data.email);
+          setLoggedIn(true);
+          history.push('/');
+        }
+      })
+      .catch(err => console.log(err));
+
   }
 
-  const history = useHistory();
   useEffect(() => {
     tokenCheck()
-  },[])
+  }, [])
 
-  const [userData, setUserData] = useState({ email: '' });
+
   function tokenCheck() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        auth.getToken(token)
-          .then((res) => {
-            if (res) {
-              setUserData({ email: res.data.email });
-              handleLogin();
-              history.push('/');
-            }
-          })
-      }
+    const token = localStorage.getItem('token');
+    if (token) {
+      auth.getToken(token)
+        .then((res) => {
+          if (res) {
+            setEmail(res.data.email);
+            setLoggedIn(true);
+            history.push('/');
+          }
+        })
     }
   }
 
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+
 
   function handleInfoTooltip() {
     setIsInfoTooltipOpen(true);
   }
 
-const [isRegistered, setIsRegistered] = useState(false);
 
-function handleRegistered() {
-  setIsRegistered(true);
-}
 
   function handleRegister(data) {
     auth.signup(data.email, data.password)
       .then((res) => {
         if (res) {
-            handleRegistered();
-            handleInfoTooltip();
+          setIsRegistered(true);
+          handleInfoTooltip();
           history.push('/sign-in');
         } else {
           handleInfoTooltip();
@@ -81,29 +88,40 @@ function handleRegistered() {
 
   }
 
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+    history.push('/sign-in');
+  }
+
+
 
   //
 
-
   useEffect((userData) => {
-    api.getApiUserInfo(userData)
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, [])
+    if (loggedIn) {
+      api.getApiUserInfo(userData)
+        .then((userInfo) => {
+          setCurrentUser(userInfo);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, [loggedIn])
+
 
   useEffect((cardData) => {
-    api.getInitialCards(cardData)
-      .then((initialCards) => {
-        setCards(initialCards)
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, [])
+    if (loggedIn) {
+      api.getInitialCards(cardData)
+        .then((initialCards) => {
+          setCards(initialCards)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, [loggedIn])
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -195,24 +213,24 @@ function handleRegistered() {
   return (
 
     <CurrentUserContext.Provider value={currentUser}>
-
       <div className="root">
 
         <Header
-          email={userData.email}
-        loggedIn={loggedIn}
+          email={email}
+          loggedIn={loggedIn}
+          onSignout={handleSignOut}
         />
 
         <Switch>
           <Route path="/sign-in">
             <Login
-              handleLogin={handleLogin}
+              onLogin={handleLogin}
             />
           </Route>
 
           <Route path="/sign-up">
-            <Register 
-            onRegister={handleRegister} 
+            <Register
+              onRegister={handleRegister}
             />
           </Route>
 
@@ -228,23 +246,6 @@ function handleRegistered() {
             onCardDelete={handleConfirmDeleteClick}
             cards={cards}
           />
-
-          {/* <Route path="*">
-            {loggedIn ? console.log('aaaa') : console.log('bbbbb')}
-          </Route> */}
-          {/* <Route exact path="/">
-            {!loggedIn ? <Redirect to="/sign-in" /> : 
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleConfirmDeleteClick}
-              cards={cards} />
-            }
-          </Route> */}
-
         </Switch>
 
         <Footer />
@@ -273,13 +274,12 @@ function handleRegistered() {
           onClose={closeAllPopups}
           onConfirmDelete={handleCardDelete} />
 
-          <InfoTooltip 
+        <InfoTooltip
           isOpen={isInfoTooltipOpen}
-          onClose={closeAllPopups} 
-          isRegistered={isRegistered}/>
+          onClose={closeAllPopups}
+          isRegistered={isRegistered} />
 
       </div>
-
     </CurrentUserContext.Provider>
   )
 }

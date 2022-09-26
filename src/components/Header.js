@@ -1,33 +1,26 @@
 import logo from '../images/logo.svg';
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
-function Header({ email, loggedIn }) {
-
-  const history = useHistory();
-
-  function signOut() {
-    localStorage.removeItem('token');
-    history.push('/sign-in');
-  }
+function Header({ email, onSignout }) {
 
   return (
     <header className="header">
       <a href="#"><img className="header__logo" src={logo} alt="Лого" /></a>
       <nav className="menu">
-        {loggedIn && (
+        <Route exact path="/">
           <h2 className="menu__email">{email}</h2>
-        )}
-        {loggedIn && (
           <button className="menu__link menu__button"
-            onClick={signOut}>Выйти</button>
-        )}
-        {!loggedIn && (
-          <Link className="menu__link" to="/sign-up">Регистрация</Link>)}
-        {!loggedIn && (
-          <Link className="menu__link" to="/sign-in">Войти</Link>
-        )}
+            onClick={onSignout}>Выйти</button>
+        </Route>
 
+        <Route path="/sign-in">
+          <Link className="menu__link" to="/sign-up">Регистрация</Link>
+        </Route>
+
+        <Route path="/sign-up">
+          <Link className="menu__link" to="/sign-in">Войти</Link>
+        </Route>
       </nav>
     </header>
   )
