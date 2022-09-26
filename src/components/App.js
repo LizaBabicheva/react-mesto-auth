@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -28,75 +28,13 @@ function App() {
   const [cardDelete, setCardDelete] = useState({});
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
-  //
-
   const [email, setEmail] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
 
-  function handleLogin(data) {
-    auth.signin(data.email, data.password)
-      .then((res) => {
-        if (res.token) {
-          setEmail(data.email);
-          setLoggedIn(true);
-          history.push('/');
-        }
-      })
-      .catch(err => console.log(err));
-
-  }
-
   useEffect(() => {
     tokenCheck()
   }, [])
-
-
-  function tokenCheck() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      auth.getToken(token)
-        .then((res) => {
-          if (res) {
-            setEmail(res.data.email);
-            setLoggedIn(true);
-            history.push('/');
-          }
-        })
-    }
-  }
-
-
-
-  function handleInfoTooltip() {
-    setIsInfoTooltipOpen(true);
-  }
-
-
-
-  function handleRegister(data) {
-    auth.signup(data.email, data.password)
-      .then((res) => {
-        if (res) {
-          setIsRegistered(true);
-          handleInfoTooltip();
-          history.push('/sign-in');
-        } else {
-          handleInfoTooltip();
-        }
-      });
-
-  }
-
-  function handleSignOut() {
-    localStorage.removeItem('token');
-    setLoggedIn(false);
-    history.push('/sign-in');
-  }
-
-
-
-  //
 
   useEffect((userData) => {
     if (loggedIn) {
@@ -109,7 +47,6 @@ function App() {
         })
     }
   }, [loggedIn])
-
 
   useEffect((cardData) => {
     if (loggedIn) {
@@ -135,6 +72,10 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function handleInfoTooltip() {
+    setIsInfoTooltipOpen(true);
+  }
+
   function handleCardClick(card) {
     setSelectedCard(card);
   }
@@ -150,9 +91,52 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: '', link: '' });
     setIsConfirmDeletePopupOpen(false);
-    //
     setIsInfoTooltipOpen(false);
-    //
+  }
+
+  function handleRegister(data) {
+    auth.signup(data.email, data.password)
+      .then((res) => {
+        if (res) {
+          setIsRegistered(true);
+          handleInfoTooltip();
+          history.push('/sign-in');
+        } else {
+          handleInfoTooltip();
+        }
+      });
+  }
+
+  function tokenCheck() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      auth.getToken(token)
+        .then((res) => {
+          if (res) {
+            setEmail(res.data.email);
+            setLoggedIn(true);
+            history.push('/');
+          }
+        })
+    }
+  }
+
+  function handleLogin(data) {
+    auth.signin(data.email, data.password)
+      .then((res) => {
+        if (res.token) {
+          setEmail(data.email);
+          setLoggedIn(true);
+          history.push('/');
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+    history.push('/sign-in');
   }
 
   function handleUpdateUser(userData) {
@@ -222,19 +206,7 @@ function App() {
         />
 
         <Switch>
-          <Route path="/sign-in">
-            <Login
-              onLogin={handleLogin}
-            />
-          </Route>
-
-          <Route path="/sign-up">
-            <Register
-              onRegister={handleRegister}
-            />
-          </Route>
-
-          <ProtectedRoute
+        <ProtectedRoute
             exact path="/"
             loggedIn={loggedIn}
             component={Main}
@@ -246,6 +218,18 @@ function App() {
             onCardDelete={handleConfirmDeleteClick}
             cards={cards}
           />
+
+          <Route path="/sign-in">
+            <Login
+              onLogin={handleLogin}
+            />
+          </Route>
+
+          <Route path="/sign-up">
+            <Register
+              onRegister={handleRegister}
+            />
+          </Route>
         </Switch>
 
         <Footer />
