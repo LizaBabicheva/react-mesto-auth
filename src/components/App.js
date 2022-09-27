@@ -104,7 +104,10 @@ function App() {
         } else {
           handleInfoTooltip();
         }
-      });
+      })
+      .catch((err) => {
+        console.log(err);
+      }) 
   }
 
   function tokenCheck() {
@@ -118,6 +121,9 @@ function App() {
             history.push('/');
           }
         })
+        .catch((err) => {
+          console.log(err);
+        }) 
     }
   }
 
