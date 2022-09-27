@@ -13,7 +13,7 @@ import ConfirmDeletePopup from './ConfirmDeletePopup';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import * as auth from '../auth.js';
+import * as auth from '../utils/auth.js';
 import InfoTooltip from './InfoTooltip';
 
 function App() {
