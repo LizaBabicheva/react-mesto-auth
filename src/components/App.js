@@ -101,13 +101,12 @@ function App() {
           setIsRegistered(true);
           handleInfoTooltip();
           history.push('/sign-in');
-        } else {
-          handleInfoTooltip();
         }
       })
       .catch((err) => {
         console.log(err);
-      }) 
+        handleInfoTooltip();
+      })
   }
 
   function tokenCheck() {
@@ -123,7 +122,7 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
-        }) 
+        })
     }
   }
 
@@ -131,12 +130,15 @@ function App() {
     auth.signin(data.email, data.password)
       .then((res) => {
         if (res.token) {
+          localStorage.setItem('token', res.token);
           setEmail(data.email);
           setLoggedIn(true);
           history.push('/');
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   function handleSignOut() {
@@ -212,7 +214,7 @@ function App() {
         />
 
         <Switch>
-        <ProtectedRoute
+          <ProtectedRoute
             exact path="/"
             loggedIn={loggedIn}
             component={Main}
